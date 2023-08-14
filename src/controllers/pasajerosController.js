@@ -13,12 +13,20 @@ const getPasajeroByCedula = async (req, res) => {
   try {
     const cedula = req.params.cedula;
     const result = await pool.query(
-      "SELECT * FROM pasajeros WHERE cedula = ?",
+      "SELECT * FROM pasajeros WHERE documento = ?",
       [cedula]
     );
-    res.json(result[0]);
+    if(result[0].length > 0){
+        return res.json(result[0]);
+    }else{
+      return res.json({
+        message: "No se encontro el pasajero",
+      });
+    }
   } catch (e) {
-    console.log(e);
+    return res.json({
+      message: "No se pudo obtener el pasajero",
+    });
   }
 };
 

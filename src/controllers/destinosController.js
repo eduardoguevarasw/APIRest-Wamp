@@ -105,4 +105,19 @@ const deleteDestino = async (req, res) => {
     } catch (e) {console.log(e);}
 }
 
-export {getdestinos, getDestinoByNombre, createDestino, updateDestino, deleteDestino}
+const getDestinoByOrigen = async (req, res) => {
+    try {
+        const origen = req.params.origen;
+        const result = await pool.query(
+            //hacer un inner join con origen para traer el nombre del origen
+            "SELECT d.nombre AS nombre, d.valor AS precio, o.nombre AS origen FROM destino d INNER JOIN origen o ON d.idOrigen = o.idOrigen WHERE o.nombre = ?",
+            [origen]
+        )
+        res.json(result[0]);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
+export {getdestinos, getDestinoByNombre, createDestino, updateDestino, deleteDestino, getDestinoByOrigen}
